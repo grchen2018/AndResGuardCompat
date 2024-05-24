@@ -7,6 +7,7 @@ import com.tencent.mm.androlib.res.decoder.ARSCDecoder;
 import com.tencent.mm.androlib.res.util.StringUtil;
 import com.tencent.mm.directory.DirectoryException;
 import com.tencent.mm.util.FileOperation;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -49,10 +50,19 @@ public class Main {
           currentThread.getId(),
           currentThread.getName()
       );
+
       File finalApkFile = StringUtil.isPresent(inputParam.finalApkBackupPath) ?
           new File(inputParam.finalApkBackupPath)
           : null;
-
+      String filePath = finalApkFile.getAbsolutePath();
+      System.out.printf("origin file path:" + filePath);
+      File copyFile = new File(filePath.replace(finalApkFile.getName(), "backupFile.apk"));
+      try {
+        FileOperation.copyFileUsingStream(finalApkFile, copyFile);
+        System.out.printf("backup file success");
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
       resourceProguard(
           new File(inputParam.outFolder),
           finalApkFile,

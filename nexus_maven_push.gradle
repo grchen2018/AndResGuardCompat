@@ -1,0 +1,32 @@
+
+afterEvaluate {
+    publishing {
+        repositories {
+            //发布到本地maven 仓库文件夹，会发布到本地仓库${USER_HOME}/.m2/setting.xml配置的仓库目录
+            //publish 和 publishToMavenLocal都会执行
+            mavenLocal()
+            maven {
+                if (!publishToServer) {
+                    url = localPath
+                } else {
+                    url = REPOSITORY_URL
+                    credentials {
+                        username = NEXUS_USERNAME
+                        password = NEXUS_PASSWORD
+                    }
+                }
+            }
+        }
+        publications {
+            release(MavenPublication) {
+                from components.java
+                pom {
+                    name = aarId
+                    artifactId = aarId
+                    groupId = groupID
+                    version = versionName
+                }
+            }
+        }
+    }
+}

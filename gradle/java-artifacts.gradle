@@ -2,14 +2,23 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = rootProject.ext.javaVersion
 targetCompatibility = rootProject.ext.javaVersion
-
+def gradleVersion = gradle.gradleVersion
+def gradleVersionAbove5_1_0 = (GradleVersion.version(gradleVersion) <=> GradleVersion.version("5.1.0")) >= 0
 task sourcesJar(type: Jar) {
   from sourceSets.main.java.srcDirs
-  classifier = 'sources'
+  if (gradleVersionAbove5_1_0) {
+    setArchiveClassifier("sources")
+  } else {
+    classifier = 'sources'
+  }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
+  if (gradleVersionAbove5_1_0) {
+    setArchiveClassifier("sources")
+  } else {
+    classifier = 'javadoc'
+  }
   from javadoc.destinationDir
 }
 

@@ -19,6 +19,7 @@ package apksigner;
 import com.android.apksig.ApkSigner;
 import com.android.apksig.ApkVerifier;
 import com.android.apksig.apk.MinSdkVersionException;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -56,6 +57,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+
 import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -110,7 +112,11 @@ public class ApkSignerTool {
       printUsage(HELP_PAGE_SIGN);
       return;
     }
-
+    StringBuilder sb = new StringBuilder();
+    for (String p : params) {
+      sb.append(p + " ");
+    }
+    System.out.println(sb.toString());
     File outputApk = null;
     File inputApk = null;
     boolean verbose = false;
@@ -213,7 +219,10 @@ public class ApkSignerTool {
 
     List<ApkSigner.SignerConfig> signerConfigs = new ArrayList<>(signers.size());
     int signerNumber = 0;
-    try (PasswordRetriever passwordRetriever = new PasswordRetriever()) {
+    System.out.println("start sign apk files ------>");
+    try {
+      PasswordRetriever passwordRetriever = new PasswordRetriever();
+      System.out.println("password retriever success");
       for (SignerParams signer : signers) {
         signerNumber++;
         signer.name = "signer #" + signerNumber;
@@ -251,6 +260,8 @@ public class ApkSignerTool {
         ).build();
         signerConfigs.add(signerConfig);
       }
+    } catch (Exception exception) {
+      throw exception;
     }
 
     if (outputApk == null) {

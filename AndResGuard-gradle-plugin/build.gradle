@@ -1,7 +1,5 @@
 apply plugin: 'groovy'
-
-version rootProject.ext.VERSION_NAME
-group rootProject.ext.GROUP
+apply plugin: 'maven-publish'
 
 dependencies {
   implementation gradleApi()
@@ -11,9 +9,22 @@ dependencies {
   implementation project(':AndResGuard-core')
 }
 
-repositories {
-  mavenCentral()
+ext {
+  // artifactId
+  aarId = "AndResGuard-gradle-plugin"
+  // snapshot version use x.x.x-snapshot, release version use x.x.x
+  versionName = rootProject.ext.versionName
+  // 默认 false, true 代表推远程maven仓
+  publishToServer = rootProject.ext.publishToServer
+  groupID = rootProject.ext.groupID
+  // aar local path
+  localPath = '../repo'
 }
 
-apply from: rootProject.file('gradle/java-artifacts.gradle')
-//apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+
+apply from: "../nexus_maven_push.gradle"
+
+//
+//repositories {
+//  mavenCentral()
+//}

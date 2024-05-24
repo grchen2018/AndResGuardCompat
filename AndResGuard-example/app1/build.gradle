@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 buildscript {
   repositories {
     mavenLocal()
-    mavenCentral()
+    jcenter()
     google()
   }
   dependencies {
@@ -40,7 +40,7 @@ andResGuard {
 }
 
 repositories {
-  mavenCentral()
+  jcenter()
   maven { url 'https://maven.fabric.io/public' }
 }
 
